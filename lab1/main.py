@@ -6,12 +6,17 @@ from progress import print_progress
 
 def upsampling (image: Image, k: int) -> Image:
   width, height = image.size
+
   pixels = image.load()
-  newPixels = np.random.random_integers(0, 255, (height * k, width * k, 3))
+
+  newWidth = width * k
+  newHeight = height * k
+
+  newPixels = np.random.random_integers(0, 255, (newHeight, newWidth, 3))
   newPixels = np.array(newPixels, dtype=np.uint8)
 
   for i in range(width):
-    print_progress(i, width, 5)
+    # для красоты выводим прогресс выполнения функции
     for j in range(height):
       for s_i in range(k):
         for s_j in range(k):
@@ -19,52 +24,63 @@ def upsampling (image: Image, k: int) -> Image:
       
   return Image.fromarray(newPixels)
 
-
-def downsampling (image: Image, n: int) -> Image:
+def downsampling (image: Image, n: int, random_pick = False) -> Image:
   width, height = image.size
-  pixels = image.load()
-  newPixels = np.random.random_integers(0, 255, (math.ceil(height / n), math.ceil(width / n), 3))
-  newPixels = np.array(newPixels, dtype=np.uint8) 
 
-  ii = 0
-  for i in range(0, width, n):
-    print_progress(i, width, 5)
-    jj = 0
-    for j in range(0, height, n):
-      newPixels[jj, ii] = pixels[i, j]
-      jj += 1
-    ii += 1
+  pixels = image.load()
+
+  newWidth = math.floor(width / n)
+  newHeight = math.floor(height / n)
+
+  newPixels = np.random.random_integers(0, 255, (newHeight, newWidth, 3))
+  newPixels = np.array(newPixels, dtype=np.uint8)
+
+  for i in range(newHeight):
+    for j in range(newWidth):
+      r, g, b = (0, 0, 0)
+
+      x = j * n
+      y = i * n
+
+      # вычисление среднего значения (r, g ,b) пикселей в каждом блоке nxn
+      if(random_pick):
+        block = np.array(image.crop((x, y, x + n, y + n)))
+        red, green, blue = list(), list(), list()
+
+        for k in range(n):
+          for m in range(n):
+            red.append(block[k, m, 0])
+            green.append(block[k, m, 1])
+            blue.append(block[k, m, 2])
+
+        r = int(np.mean(red))
+        g = int(np.mean(green))
+        b = int(np.mean(blue))
+      else:
+        # берем первый пиксель
+        r, g, b = pixels[y, x]
+
+      newPixels[i, j] = (r, g, b)
       
   return Image.fromarray(newPixels)
 
+def resampling (image: Image, upsampling_k: int, downsampling_k: int) -> Image:
+  return downsampling(upsampling(image, upsampling_k), downsampling_k)
 
-def resampling (image: Image, k: int, n: int) -> Image:
-  return downsampling(upsampling(image, k), n)
-
-def one_resampling (image: Image, m) -> Image:
+def one_resampling (image: Image, m: float) -> Image:
   width, height = image.size
   pixels = image.load()
-  newPixels = np.random.random_integers(0, 255, (math.ceil(height * m), math.ceil(width * m), 3))
+
+  newWidth = math.floor(width * m)
+  newHeight = math.floor(height * m)
+
+  newPixels = np.random.random_integers(0, 255, (newHeight, newWidth, 3))
   newPixels = np.array(newPixels, dtype=np.uint8)
 
-  i = 0
-  while(i <= width * m - 1):
-    print_progress(i, width * m - 1, 5)
-    j = 0
-    while(j <= height * m - 1):
-      newPixels[j, i] = pixels[math.ceil(i / m), math.ceil(j / m)]
-      j += 1
-    i += 1
+  for i in range(newHeight):
+    for j in range(newWidth):
+      x = math.floor(j / m)
+      y = math.floor(i / m)
+      newPixels[i, j] = pixels[x, y]
 
   return Image.fromarray(newPixels)
-
-
-def main():
-  img = Image.open('images/biggest.png', 'r').convert('RGB')
-
-  newImage = downsampling(img, 10)
-  newImage.save('images/out/biggest_0.1x.png')
-
-
-if __name__ == '__main__':
-  main()
