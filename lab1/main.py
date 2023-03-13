@@ -29,8 +29,8 @@ def downsampling (image: Image, n: int, random_pick = False) -> Image:
 
   pixels = image.load()
 
-  newWidth = math.floor(width / n)
-  newHeight = math.floor(height / n)
+  newWidth = width // n
+  newHeight = height // n
 
   newPixels = np.random.random_integers(0, 255, (newHeight, newWidth, 3))
   newPixels = np.array(newPixels, dtype=np.uint8)
@@ -58,7 +58,7 @@ def downsampling (image: Image, n: int, random_pick = False) -> Image:
         b = int(np.mean(blue))
       else:
         # берем первый пиксель
-        r, g, b = pixels[y, x]
+        r, g, b = pixels[x, y]
 
       newPixels[i, j] = (r, g, b)
       
