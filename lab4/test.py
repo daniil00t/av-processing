@@ -32,6 +32,7 @@ def contour_selection_test(operator_x, operator_y, window_size: int):
     output_name_y = f'images/out/{image_name}_y.processed.png'
     output_name_binary = f'images/out/{image_name}_binary.processed.png'
     output_name = f'images/out/{image_name}.processed.png'
+    output_name_grayscale = f'images/out/{image_name}_grayscale.processed.png'
 
     audit.append({
       'name': output_name_x,
@@ -53,10 +54,12 @@ def contour_selection_test(operator_x, operator_y, window_size: int):
       'input_size': f'{image.size[0]}x{image.size[1]}',
       'output_size': f'{binary_img.size[0]}x{binary_img.size[1]}'
     })
+
     g_x_img.save(output_name_x)
     g_y_img.save(output_name_y)
     g_img.save(output_name)
     binary_img.save(output_name_binary)
+    grayscale_image.save(output_name_grayscale)
 
   end_time = time_ns()
   printAudit('contour_selection', end_time - start_time, audit)
