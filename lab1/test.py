@@ -7,8 +7,9 @@ def getImages():
   img_main = Image.open('images/main.png', 'r').convert('RGB')
   img_big = Image.open('images/big.png', 'r').convert('RGB')
   img_biggest = Image.open('images/biggest.png', 'r').convert('RGB')
+  img_gigachad = Image.open('images/gigachad.png', 'r').convert('RGB')
 
-  return {'main': img_main, 'img_big': img_big, 'img_biggest': img_biggest}
+  return {'main': img_main, 'img_big': img_big, 'img_biggest': img_biggest, 'img_gigachad': img_gigachad}
   # return {'main': img_main}
 
 def printAudit(test_name, delta_time, audit):
@@ -79,7 +80,7 @@ def resampling_test():
 
 def one_resampling_test():
   images = getImages()
-  n = 4 / 9
+  n = 64 / 235
 
   start_time = time_ns()
   audit = []

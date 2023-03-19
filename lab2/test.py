@@ -7,8 +7,10 @@ def getImages():
   img_main = Image.open('images/in/mob.png', 'r').convert('RGB')
   img_nogame = Image.open('images/in/nogame.png', 'r').convert('RGB')
   img_rentgen = Image.open('images/in/rentgen.png', 'r').convert('RGB')
+  img_circles = Image.open('images/in/circles.png', 'r').convert('RGB')
+  img_forms = Image.open('images/in/forms.png', 'r').convert('RGB')
 
-  return {'main': img_main, 'img_big': img_nogame, 'img_rentgen': img_rentgen}
+  return {'main': img_main, 'img_big': img_nogame, 'img_rentgen': img_rentgen, 'circles': img_circles, 'forms': img_forms}
 
 def printAudit(test_name, delta_time, audit):
   print(f'\nTest {test_name} passed: {(delta_time) / math.pow(10, 9)}s')
@@ -61,8 +63,8 @@ def two_threshold_binarize_test():
   start_time = time_ns()
   audit = []
   for (image_name, image) in images.items():
-    newImage = two_threshold_binarize(image, 150, 200)
-    # newImage = two_threshold_binarize(image, 150, 200, reverse=True)
+    # newImage = two_threshold_binarize(image, 150, 200)
+    newImage = two_threshold_binarize(image, 10, 200, reverse=True)
     output_name = f'images/out/two_threshold_binarize/{image_name}.processed.png'
     audit.append({
       'name': output_name,
@@ -76,7 +78,7 @@ def two_threshold_binarize_test():
 
 
 def main():
-  mean_grayscale_test()
+  # mean_grayscale_test()
   photoshop_grayscale_test()
   two_threshold_binarize_test()
 
