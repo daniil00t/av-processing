@@ -18,7 +18,6 @@ def printAudit(test_name, delta_time, audit):
     output_size = i.get('output_size')
     print(f'Image {name}; input_size: {input_size}; output_size: {output_size}')
 
-
 def contour_selection_test(operator_x, operator_y, window_size: int):
   images = getImages()
 

@@ -33,8 +33,9 @@ def median_filter(image, template_side_length):
 def erosion(image, template_side_length, template):
   new_image = np.zeros(image.shape, image.dtype)
 
-  # Coordinates are provided as (y,x), where the origin is at the top left of the image
-  # So always remember that (-) is used instead of (+) to iterate
+  # Координаты предоставляются в виде (y,x), где начало координат находится в левом верхнем углу изображения
+  # Поэтому всегда помните, что (-) используется вместо (+) для итерации
+  
   template_space = calculate_template_space(template_side_length)
   half_template = int((template_side_length - 1) / 2)
 

@@ -1,6 +1,8 @@
 from PIL import Image
 import numpy as np
 
+# вариант: 2
+
 def photoshop_grayscale(image):
   result = Image.new('L', (image.width, image.height))
 
@@ -21,6 +23,7 @@ operator_roberts_y = np.array([[ 0, 0, 0],
 
 def contour_selection(image, operator_x, operator_y, window_size):
   width, height = image.size
+  S = 2.5
   
   gray_arr = np.asarray(image, dtype=np.uint8)
   
@@ -50,11 +53,12 @@ def contour_selection(image, operator_x, operator_y, window_size):
   G_y_matrix_normalized = np.abs(G_y_matrix / np.max(G_y_matrix) * 255)
   G_matrix_normalized = G_matrix / np.max(G_matrix) * 255
   
-  t = np.mean(G_matrix_normalized) * 2.5
+  t = np.mean(G_matrix_normalized) * S
 
-  g_x_img = Image.fromarray(G_x_matrix_normalized.astype(np.uint8), mode='L')
-  g_y_img = Image.fromarray(G_y_matrix_normalized.astype(np.uint8), mode='L')
+  gXImg = Image.fromarray(G_x_matrix_normalized.astype(np.uint8), mode='L')
+  gYImg = Image.fromarray(G_y_matrix_normalized.astype(np.uint8), mode='L')
+
   g_img = Image.fromarray(G_matrix_normalized.astype(np.uint8), mode='L')
   binary_img = Image.fromarray((G_matrix_normalized > t).astype(np.uint8) * 255, mode = 'L')
 
-  return g_x_img, g_y_img, g_img, binary_img
+  return gXImg, gYImg, g_img, binary_img
