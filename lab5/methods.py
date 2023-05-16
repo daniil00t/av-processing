@@ -211,7 +211,7 @@ def write_profile(img, letter_path, type='x'):
 
 # сохраняем значения характеристик в файлики
 def features_save(alphabet):
-  with open('russian_font_features.csv', 'w', encoding='utf-8') as f:
+  with open('lower_russian_font_features.csv', 'w', encoding='utf-8') as f:
     writer = csv.DictWriter(f, fieldnames=['letter', 'weight', 'rel_weight',
                          'x_avg', 'y_avg', 'rel_x_avg', 'rel_y_avg', 
                          'inertia_x', 'inertia_y', 'rel_inertia_x', 'rel_inertia_y'])
