@@ -85,7 +85,7 @@ def show_profiles_x(img):
   plt.bar(x=profiles['x_range'], height=profiles['x_profiles'], width=0.85)
   plt.ylim(0, max(profiles['x_profiles']))
   plt.xlim(0, max(profiles['x_range']))
-  plt.show()
+  plt.savefig('profiles_x.png')
 
 def show_profiles_y(img):
   profiles = get_profiles(img)
@@ -93,17 +93,19 @@ def show_profiles_y(img):
   plt.barh(y=profiles['y_range'], width=profiles['y_profiles'], height=0.85)
   plt.ylim(max(profiles['y_range']), 0 ) #img.size[1], 0)
   plt.xlim(0, max(profiles['y_profiles']))
-  plt.show()
+  plt.savefig('profiles_y.png')
 
 def get_segments_list(img):
   img_arr_for_calculations = color_used_arr(img)
   x_profiles = np.sum(img_arr_for_calculations, axis=0)
+  x_profiles[0] = 0
   lst = []
   new_lst = []
   for i in range(len(x_profiles)):
     if x_profiles[i] == 0:
       lst.append(i)
   lst.append(img.width)
+  
 
   
   for i in range(len(lst)-1):
@@ -117,11 +119,12 @@ def get_segments_list(img):
   segments = []
   for i in range(0, len(new_lst)-1, 2):
     segments.append((new_lst[i], new_lst[i+1]))
+    
   return segments
 
 def result_draw(image, segments):
-  left_color = (124,252,0)
-  right_color = (160,32,240)
+  left_color = (22,133,224)
+  right_color = (255, 38, 255)
   result = image.copy().convert('RGB')
   result_draw = ImageDraw.Draw(im=result)
   for segment in segments:
@@ -129,14 +132,14 @@ def result_draw(image, segments):
     result_draw.rectangle(xy=[(segment[1], 0), (segment[1], result.height)], fill=right_color)
   return result
 
-
+# todo: вынести в конфиг значения констант
 font_size = 52
 font = ImageFont.truetype("fonts/tnr_regular.ttf", font_size)
 
-
-def generate_sentence():
+def generate_sentence(text):
   img = Image.new(mode="L", size=(2555, 150), color="white")
   draw = ImageDraw.Draw(img, mode = 'L')
-  draw.text(xy=(0, 0), text='СВЕРХЗВУКОВОЙ ИСТРЕБИТЕЛЬ', fill=0, font=font, anchor = 'lt')
+  draw.text(xy=(0, 0), text=text, fill=0, font=font, anchor = 'lt')
   cutted_img = cut_empty_rows_and_cols(img) #cut_white_image_parts(img)
   simple_binarization(cutted_img, 100).save('font_52_test.png')
+
