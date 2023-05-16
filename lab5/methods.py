@@ -3,6 +3,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 import csv
 
+# получаем алфавит
 def getAlphabet(string):
   alphabet = []
   for letter in string:
@@ -10,14 +11,14 @@ def getAlphabet(string):
 
   return alphabet
 
-
-# написать комменты, что делает функции
+# бинаризуем изображение
 def simple_binarization(image, threshold):
   img_arr = np.array(image)
   new_image = np.zeros(shape=img_arr.shape)
   new_image[img_arr > threshold] = 255
   return Image.fromarray(new_image.astype(np.uint8), 'L')
 
+# вырезаем белые места из изображения буквы
 def cut_white_image_parts(image):
 
   for x in range(image.width-1, -1, -1):
@@ -110,6 +111,7 @@ def cut_empty_rows_and_cols(image):
 
   return image.crop(box=(left_whitespace_end, upper_whitespace_end, right_whitespace_end + 1, lower_whitespace_end + 1))
 
+# генерируем картинки букв и сохраняем их в файлы
 def font_generate(alphabet):
   font_size = 100
   font = ImageFont.truetype("fonts/tnr_regular.ttf", font_size)
@@ -125,6 +127,7 @@ def font_generate(alphabet):
 def color_used_arr(img):
   return np.asarray(np.asarray(img) < 1, dtype = np.int0)
 
+# получаем значения характеристик
 def get_features(img):
   img_pixels = img.load()
   
@@ -172,6 +175,7 @@ def get_features(img):
     'rel_inertia_y': rel_inertia_y
   }
 
+# получаем профили по x & y
 def get_profiles(img):
   img_arr_for_calculations = color_used_arr(img)
   
@@ -205,6 +209,7 @@ def write_profile(img, letter_path, type='x'):
   plt.savefig(letter_path)
   plt.clf()
 
+# сохраняем значения характеристик в файлики
 def features_save(alphabet):
   with open('russian_font_features.csv', 'w', encoding='utf-8') as f:
     writer = csv.DictWriter(f, fieldnames=['letter', 'weight', 'rel_weight',
@@ -220,6 +225,7 @@ def features_save(alphabet):
       
       writer.writerow(features)
 
+# сохраняем значения профилей в файлики
 def profile_save(alphabet):
   for letter in alphabet:
     image = Image.open(f'letter_images/letter_{letter}.png')
