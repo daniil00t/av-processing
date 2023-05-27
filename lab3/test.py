@@ -7,8 +7,9 @@ def getImages():
   img_main = Image.open('images/in/neuro_binary.png', 'r').convert('RGB')
   img_neuro_grayscale = Image.open('images/in/neuro_grayscale.png', 'r').convert('RGB')
   img_random_forms = Image.open('images/in/random_forms.png', 'r').convert('RGB')
+  main = Image.open('images/in/main.png', 'r').convert('RGB')
 
-  return {'binary': img_main, 'grayscale': img_neuro_grayscale, 'img_random_forms': img_random_forms}
+  return {'binary': img_main, 'grayscale': img_neuro_grayscale, 'img_random_forms': img_random_forms, 'main': main}
 
 def printAudit(test_name, delta_time, audit):
   print(f'\nTest {test_name} passed: {(delta_time) / math.pow(10, 9)}s')
@@ -45,7 +46,7 @@ def erosion_test(iterations: int, template_n: int):
   printAudit('mean_grayscale', end_time - start_time, audit)
 
 def test():
-  erosion_test(3, 3)
+  erosion_test(1, 3)
 
 if __name__ == '__main__':
   test()
